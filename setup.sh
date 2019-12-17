@@ -9,78 +9,173 @@ set -o errtrace
 # Detect errors before piping
 set -o pipefail
 
-# Grab the username of the current user, if it hasn't been passed in as an argument
-username=${1:-$(whoami)}
+readonly BASH_PROFILE_URL="https://raw.githubusercontent.com/learn-co-students/online-web-pt-081219/master/00-linux-virtual-machine/xubuntu/linux_bash_profile"
+readonly IRBRC_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/master/irbrc"
+readonly GITIGNORE_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore"
+readonly GITCONFIG_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig"
+readonly GPG_KEYS="409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
 
-# Relaunch this script with sudo
-[ "$UID" -eq 0 ] || exec sudo "$0" "${username}"
+readonly user=${1:-$(whoami)}
 
-# Make sure that the system is up to date
-apt-get -yq update
-apt-get -yq upgrade
+eexit() {
+	local __message=${1:-"An unkown error occured!"}
+	echo ${__message}
+	exit -1
+}
 
-# Make sure that required tools are installed: RVM requires gnupg2
-# and curl; git is just good to have
-apt-get -yq install gnupg2 curl git
+run_as_root() {
+    local __cmd=$1
+    local __full_cmd="${__cmd}"
+    eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
+}
 
-####
-## Setup Configuration files
-####
+run_as_user() {
+    local __cmd=$1
+    local __full_cmd="su -l ${user} -c \"${__cmd}\""
+    eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
+}
 
-# When RVM installs ruby, it's going to run a script that involves running sudo. This script
-# will only work if run from an interactive shell and not from within this bash script--this
-# work around makes sudo not ask for a password, so that we can run the RVM from within this
-# script.
-{ grep -qxF "${username} ALL=(ALL) NOPASSWD: ALL" /etc/sudoers || echo "${username} ALL=(ALL) NOPASSWD: ALL" >>/etc/sudoers; }
+run_if_not_installed() {
+    local __program=$1
+    local __cmd=$2
 
-# Download the flatiron bash_profile
-su -l ${username} -c 'if [ -f ~/.profile ]; then mv ~/.profile{,.bak}; fi'
-su -l ${username} -c 'wget https://raw.githubusercontent.com/learn-co-students/online-web-pt-081219/master/00-linux-virtual-machine/xubuntu/linux_bash_profile -O ~/.profile'
+    run_as_user "hash ${__program} 2>/dev/null || ${__cmd}"
+}
 
-# Tell the XFCE4 terminal emulated to use a login shell
-su -l ${username} -c 'grep -qxF "[Configuration]" ~/.config/xfce4/terminal/terminalrc || echo "[Configuration]" >> ~/.config/xfce4/terminal/terminalrc'
-su -l ${username} -c 'grep -qxF "CommandLoginShell=TRUE" ~/.config/xfce4/terminal/terminalrc || echo "CommandLoginShell=TRUE" >> ~/.config/xfce4/terminal/terminalrc'
+run_if_not_function() {
+    local __function=$1
+    local __cmd=$2
 
-# Download some more flatiron dotfiles
-su -l ${username} -c 'wget https://raw.githubusercontent.com/flatiron-school/dotfiles/master/irbrc -O ~/.irbrc'
-su -l ${username} -c 'wget https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore -O ~/.gitignore'
-su -l ${username} -c 'wget https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig -O ~/.gitconfig'
+    run_as_user "type ${__function} 2>/dev/null || ${__cmd}"
+}
 
-####
-## Install User Dev Tools
-####
+username() {
+	# Check if this is being run as root
+	if [ "$UID" -eq 0 ]; then
+		local __username=""
+		echo -n "Set up a Flatiron environment for: "
+		read __username
+		echo "${__username}"
+	else
+	    # Not root, return current user and elevate permissions
+	    echo $(whoami)
+	fi
+}
 
-# Install RVM
-su -l ${username} -c 'gpg2 --recv-keys 409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB'
-su -l ${username} -c 'hash rvm 2>/dev/null || wget -q -O - https://get.rvm.io | bash'
+pkg_update() {
+    run_as_root "apt-get -yq update"
+}
 
-# Install ruby
-su -l ${username} -c 'hash ruby 2>/dev/null || rvm install ruby'
-# By default don't parse rdoc
-su -l ${username} -c 'echo "gem: --no-document" >> $HOME/.gemrc'
-# Install the needed gems
-su -l ${username} -c 'gem update --system'
-su -l ${username} -c 'gem install learn-co'
-su -l ${username} -c 'gem install phantomjs'
-apt-get -yq install libpq-dev
-su -l ${username} -c 'gem install pg'
-su -l ${username} -c 'gem install sqlite3'
-su -l ${username} -c 'gem install bundler'
-su -l ${username} -c 'gem install rails'
+pkg_upgrade() {
+    run_as_root "apt-get -yq upgrade"
+}
 
-# Some problems come up if ~/.netrc doesn't exist
-su -l ${username} -c 'touch ~/.netrc && chmod 0600 ~/.netrc'
+pkg_install() {
+    local __packages=$1
+    run_as_root "apt-get -yq install ${__packages}"
+}
 
-# Install NVM
-su -l ${username} -c 'type nvm >/dev/null 2>&1 || wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash'
-# Install node
-su -l ${username} -c 'hash node 2>/dev/null || nvm install node'
-# Install create-react-app
-su -l ${username} -c 'hash create-react-app 2>/dev/null || npm install -g create-react-app'
-# Install phantomjs
-su -l ${username} -c 'hash phantomjs 2>/dev/null || npm install -g phantomjs'
+append_line_to_file_as_root() {
+    local __line=$1
+    local __file=$2
 
-echo "
+    run_as_root "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
+}
+
+append_line_to_file_as_user() {
+    local __line=$1
+    local __file=$2
+
+    run_as_user "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
+}
+
+download() {
+    local __url=$1
+    local __output=$2
+
+    run_as_user "wget ${__url} -O ${__output}"
+}
+
+#####
+### Entry point
+#####
+
+main() {
+    append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"
+
+	# Make sure that the system is up to date
+	pkg_update
+	pkg_upgrade
+
+	# Make sure that required tools are installed: RVM requires gnupg2
+	# and curl; git is just good to have
+	pkg_install "gnupg2 curl git"
+
+
+	####
+	## Setup Configuration files
+	####
+
+	# When RVM installs ruby, it's going to run a script that involves running sudo. This script
+	# will only work if run from an interactive shell and not from within this bash script--this
+	# work around makes sudo not ask for a password, so that we can run the RVM from within this
+	# script.
+#	append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"
+
+	# Download the flatiron bash_profile
+	run_as_user "if [ -f ~/.profile ]; then mv ~/.profile{,.bak}; fi"
+
+	download "${BASH_PROFILE_URL}" "${HOME}/.profile"
+
+	# Tell the XFCE4 terminal emulated to use a login shell
+	append_line_to_file_as_user "[Configuration]" "${HOME}/.config/xfce4/terminal/terminalrc"
+	append_line_to_file_as_user "CommandLoginShell=TRUE" "${HOME}/.config/xfce4/terminal/terminalrc"
+
+	# Download some more flatiron dotfiles
+	download "${IRBRC_URL}" "${HOME}/.irbrc"
+	download "${GITIGNORE_URL}" "${HOME}/.gitignore"
+	download "${GITCONFIG_URL}" "${HOME}/.gitconfig"
+
+	####
+	## Install User Dev Tools
+	####
+
+	# Install RVM
+	run_as_user "gpg2 --recv-keys ${GPG_KEYS}"
+	run_if_not_installed "rvm" "wget -q -O - https://get.rvm.io | bash"
+
+	# Install ruby
+	run_if_not_installed "ruby" "rvm install ruby"
+
+	# By default don't parse rdoc
+	append_line_to_file_as_user "gem: --no-document" "${HOME}/.gemrc"
+
+	# Install the needed gems
+	run_as_user 'gem update --system'
+	run_as_user 'gem install learn-co'
+	run_as_user 'gem install phantomjs'
+	pkg_install "libpq-dev"
+	run_as_user 'gem install pg'
+	run_as_user 'gem install sqlite3'
+	run_as_user 'gem install bundler'
+	run_as_user 'gem install rails'
+
+	# Some problems come up if ~/.netrc doesn't exist
+	run_as_user 'touch ~/.netrc && chmod 0600 ~/.netrc'
+
+	# Install NVM
+	run_if_not_function "nvm" "wget -q0- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash"
+
+	# Install node
+	run_if_not_installed "node" "nvm install node"
+
+	# Install create-react-app
+	run_if_not_installed "create-react-app" "npm install -g create-react-app"
+
+	# Install phantomjs
+	run_if_not_installed "phantomjs" "npm install -g phantomjs"
+
+	echo "
 
 AUTO SETUP COMPLETE!!!
 
@@ -88,5 +183,12 @@ Please run \"learn whoami\" to finish setting up the learn gem.
 
 "
 
-# Drop the user in a login shell
-su -l ${username}
+	# Drop the user in a login shell
+	run_as_root "su -l ${user}"
+}
+
+if [ "${UID}" -eq 0 ]; then
+    main
+else
+    exec sudo "$0" "${user}"
+fi
