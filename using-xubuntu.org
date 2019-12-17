@@ -7,12 +7,12 @@ machines.
 
 1. Open =VirtualBox= and click the /New/ button:
 
-[[file:01-ClickNew.png]]
+[[file:images/01-ClickNew.png]]
 
 2. Give your VM a name and make sure that the /type/ is set to /Linux/ and
    /version/ is /Ubuntu (64-bit)/ or /Ubuntu (32-bit)/:
 
-[[file:02-NameAndOperatingSystem.png]]
+[[file:images/02-NameAndOperatingSystem.png]]
 
 3. Select the amount of memory to give your VM. XUbuntu requires *at
    least* 512 MB of memory, but the more it has, the better it can run.
@@ -20,126 +20,126 @@ machines.
    host system won't have enough. Generally, you don't want to give it
    more than 1/4 of your total memory:
 
-[[file:03-MemorySize.png]]
+[[file:images/03-MemorySize.png]]
 
 4. Make sure that /Create a virtual hard disk now/ is selected and click
    /Create/:
 
-[[file:04-HardDisk.png]]
+[[file:images/04-HardDisk.png]]
 
 5. Make sure that /VDI (VirtualBox Disk Image)/ is selected and click
    /Next/:
 
-[[file:05-HardDiskFileType.png]]
+[[file:images/05-HardDiskFileType.png]]
 
 6. Make sure that /Dynamically allocated/ is selected and click /Next/:
 
-[[file:06-StorageOnPhysicalHardDisk.png]]
+[[file:images/06-StorageOnPhysicalHardDisk.png]]
 
 7. Choose a size to make your virtual hard disk. This must be at least
    *20 GB*:
 
-[[file:07-FileLocationAndSize.png]]
+[[file:images/07-FileLocationAndSize.png]]
 
 You should now see your new VM listed on the left:
 
-[[file:09-Settings.png]]
+[[file:images/09-Settings.png]]
 
 * Boot the VM
 
 1. Click on /Settings/ and navigate to the /Storage/ section:
 
-[[file:08-Settings.png]]
+[[file:images/08-Settings.png]]
 
 2. Under /Controller: IDE/ select the CD icon that says /Empty/ next to
    it. On the right, next to /Optical Drive: IDE Secondary Master/ click
    the CD icon and select /Choose Virtual Optical Disk File/:
 
-[[file:10-ClickCDIcon.png]]
+[[file:images/10-ClickCDIcon.png]]
 
 3. Navigate to where your [[*Download the XUbuntu install .iso file][.iso file]] was downloaded, select it, and
    click /Open/
 
-[[file:11-SelectISOFile.png]]
+[[file:images/11-SelectISOFile.png]]
 
 Next to that CD icon, you should now the name of the [[*Download the XUbuntu install .iso file][.iso file]] you
 downloaded, instead of /Empty/. Go ahead and click /OK/.
 
-[[file:12-ISOInserted.png]]
+[[file:images/12-ISOInserted.png]]
 
 * Install XUbuntu
 
 1. Look at the column on the left and make sure your new VM is
    selected. Click /Start/:
 
-[[file:13-ClickStart.png]]
+[[file:images/13-ClickStart.png]]
 
 2. When the VM boots up, click /Install Xubuntu/:
 
-[[file:14-Install.png]]
+[[file:images/14-Install.png]]
 
 3. Make sure that the language for the keyboard you use is selected
    and click /Continue/:
 
-[[file:15-KeyBoardLayout.png]]
+[[file:images/15-KeyBoardLayout.png]]
 
 4. Make sure that both check boxes on the /Updates and other software/
    page are selected and click /Continue/:
 
-[[file:16-UpdatesAndOtherSoftware.png]]
+[[file:images/16-UpdatesAndOtherSoftware.png]]
 
 5. Make sure that /Erase disk and install Xubuntu/ is selected and click
    /Install Now/:
 
-[[file:17-InstallationType.png]]
+[[file:images/17-InstallationType.png]]
 
 6. Click /Continue/ to confirm that you really want to write the changes
    to disks:
 
-[[file:18-ConfirmInstallationType.png]]
+[[file:images/18-ConfirmInstallationType.png]]
 
 7. Select your timezone and click /Continue/:
 
-[[file:19-Timezone.png]]
+[[file:images/19-Timezone.png]]
 
 8. Enter information to create a new user account (make sure you
    remember the password you create) and click /Continue/:
 
-[[file:20-CreateUser.png]]
+[[file:images/20-CreateUser.png]]
 
 9. XUbuntu should now be installing. It might take a little bit:
 
-[[file:21-XUbuntuIsInstalling.png]]
+[[file:images/21-XUbuntuIsInstalling.png]]
 
 10. When the installation finishes, click /Restart Now/:
 
-[[file:22-InstallationComplete.png]]
+[[file:images/22-InstallationComplete.png]]
 
 11. When it asks you to remove the installation medium, just press
    /ENTER/:
 
-[[file:23-RemoveCD.png]]
+[[file:images/23-RemoveCD.png]]
 
 The VM will now reboot:
 
-[[file:24-XUbuntuBooted.png]]
+[[file:images/24-XUbuntuBooted.png]]
 
 * (Optional) Installing Virtual Box Guest Additions
 
 1. When the VM boots up again. Select /Devices/ from the VirtualBox menu
    bar and then /Insert Guest Additions CD image.../:
 
-[[file:InsertVBoxAdditions.png]]
+[[file:images/InsertVBoxAdditions.png]]
 
 2. A virtual CD should be inserted and a /File Manager/ window should
    open:
 
-[[file:FileMangerOpens.png]]
+[[file:images/FileMangerOpens.png]]
 
 3. Right click in the /File Manager/ window and select /Open Terminal
    Here/:
 
-[[file:RightClick.png]]
+[[file:images/RightClick.png]]
 
 4. In the terminal run =sudo apt install gcc make perl=
 
@@ -151,73 +151,73 @@ appear on the screen--but it is working. Just type the password and hit
 It will pause to ask you to confirm that you want to install
 everything. Just hit /Enter/:
 
-[[file:Confirm.png]]
+[[file:images/Confirm.png]]
 
 5. In the terminal, run =sudo ./VBoxLinuxAdditions.rub=:
 
-[[file:RunVBoxAdditions.png]]
+[[file:images/RunVBoxAdditions.png]]
 
 6. The script should run and finish without any errors:
 
-[[file:VBoxAdditionsFinished.png]]
+[[file:images/VBoxAdditionsFinished.png]]
 
 7. Select /Devices/ in the VirtualBox menu bar, then /Shared Clipboard/,
    then /Bidirectional/.
 
-[[file:Clipboard.png]]
+[[file:images/Clipboard.png]]
 
 8. Click the icon in the upper left and hit the log out putting to
    restart the VM:
 
-[[file:Restart.png]]
+[[file:images/Restart.png]]
 
 * Finalizing your installation
 
 3. Open the Terminal Emulator:
 
-[[file:25-OpenTerminalEmulator.png]]
+[[file:images/25-OpenTerminalEmulator.png]]
 
 4. In the terminal run =wget https://raw.githubusercontent.com/learn-co-students/online-web-pt-081219/master/00-linux-virtual-machine/xubuntu/setup.sh=
 
-[[file:26-WGetSetupScript.png]]
+[[file:images/26-WGetSetupScript.png]]
 
 5. Run =chmod +x setup.sh=
 
-[[file:27-ChmodSetupScript.png]]
+[[file:images/27-ChmodSetupScript.png]]
 
 6. Run =./setup.sh=. It will ask you for the password you made when you
    created your user account. As you type the password, nothing will
    appear on the screen. Don't worry--it is working, just type your
    password and hit /enter/.
 
-[[file:28-RunSetupScript.png]]
+[[file:images/28-RunSetupScript.png]]
 
 When the script finishes, it should say "AUTO SETUP COMPLETE!!!":
 
-[[file:29-SetupScriptFinished.png]]
+[[file:images/29-SetupScriptFinished.png]]
 
 * Setting up the learn-co gem
 
 1. In a terminal, run =learn whoami=:
 
-[[file:30-LearnWhoAmI.png]]
+[[file:images/30-LearnWhoAmI.png]]
 
 2. Open up a web browser and navigate to https://learn.co/your-github-username. My github name is
    j-shilling, so I'm going to go to https://learn.co/j-shilling:
 
-[[file:31-NavigateToLearnCo.png]]
+[[file:images/31-NavigateToLearnCo.png]]
 
 3. Scroll to the bottom of the page and copy the OAuth Token:
 
-[[file:32-GetToken.png]]
+[[file:images/32-GetToken.png]]
 
 4. Past that OAuth Token into the terminal:
 
-[[file:33-PastToken.png]]
+[[file:images/33-PastToken.png]]
 
 When you press /Enter/ you should see your account information:
 
-[[file:34-TokenEntered.png]]
+[[file:images/34-TokenEntered.png]]
 
 * Final Steps
 
