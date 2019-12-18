@@ -151,7 +151,7 @@ main() {
 	append_line_to_file_as_user "gem: --no-document" "${HOME}/.gemrc"
 
 	# Install the needed gems
-	run_as_user 'gem update --system'
+	run_as_user 'yes | gem update --system'
 	run_as_user 'gem install learn-co'
 	run_as_user 'gem install phantomjs'
 	pkg_install "libpq-dev"
