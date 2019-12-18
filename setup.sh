@@ -14,6 +14,8 @@ readonly IRBRC_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/m
 readonly GITIGNORE_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/master/ubuntu-gitignore"
 readonly GITCONFIG_URL="https://raw.githubusercontent.com/flatiron-school/dotfiles/master/linux_gitconfig"
 readonly GPG_KEYS="409B6B1796C275462A1703113804BB82D39DC0E3 7D2BAF1CF37B13E2069D6956105BD0E739499BDB"
+readonly RVM_INSTALL_CMD="wget -q -O - https://get.rvm.io | bash"
+readonly NVM_INSTALL_CMD="wget -qO- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.2/install.sh | bash"
 
 readonly user=${1:-$(whoami)}
 
@@ -142,7 +144,7 @@ main() {
 
 	# Install RVM
 	run_as_user "gpg2 --recv-keys ${GPG_KEYS}"
-	run_if_not_installed "rvm" "wget -q -O - https://get.rvm.io | bash"
+	run_if_not_installed "rvm" "${RVM_INSTALL_CMD}"
 
 	# Install ruby
 	run_if_not_installed "ruby" "rvm install ruby"
@@ -164,7 +166,7 @@ main() {
 	run_as_user 'touch ~/.netrc && chmod 0600 ~/.netrc'
 
 	# Install NVM
-	run_if_not_function "nvm" "wget -q0- https://raw.githubusercontent.com/nvm-sh/nvm/v0.35.0/install.sh | bash"
+	run_if_not_function "nvm" "${NVM_INSTALL_CMD}"
 
 	# Install node
 	run_if_not_installed "node" "nvm install node"
