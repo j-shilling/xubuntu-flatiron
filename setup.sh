@@ -24,29 +24,29 @@ eexit() {
 }
 
 run_as_root() {
-    local __cmd=$1
-    local __full_cmd="${__cmd}"
-    eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
+	local __cmd=$1
+	local __full_cmd="${__cmd}"
+	eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
 }
 
 run_as_user() {
-    local __cmd=$1
-    local __full_cmd="su -l ${user} -c \"${__cmd}\""
-    eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
+	local __cmd=$1
+	local __full_cmd="su -l ${user} -c \"${__cmd}\""
+	eval "${__full_cmd}" || eexit "Failed to execute \"${__full_cmd}\""
 }
 
 run_if_not_installed() {
-    local __program=$1
-    local __cmd=$2
+	local __program=$1
+	local __cmd=$2
 
-    run_as_user "hash ${__program} 2>/dev/null || ${__cmd}"
+	run_as_user "hash ${__program} 2>/dev/null || ${__cmd}"
 }
 
 run_if_not_function() {
-    local __function=$1
-    local __cmd=$2
+	local __function=$1
+	local __cmd=$2
 
-    run_as_user "type ${__function} 2>/dev/null || ${__cmd}"
+	run_as_user "type ${__function} 2>/dev/null || ${__cmd}"
 }
 
 username() {
@@ -57,43 +57,43 @@ username() {
 		read __username
 		echo "${__username}"
 	else
-	    # Not root, return current user and elevate permissions
-	    echo $(whoami)
+		# Not root, return current user and elevate permissions
+		echo $(whoami)
 	fi
 }
 
 pkg_update() {
-    run_as_root "apt-get -yq update"
+	run_as_root "apt-get -yq update"
 }
 
 pkg_upgrade() {
-    run_as_root "apt-get -yq upgrade"
+	run_as_root "apt-get -yq upgrade"
 }
 
 pkg_install() {
-    local __packages=$1
-    run_as_root "apt-get -yq install ${__packages}"
+	local __packages=$1
+	run_as_root "apt-get -yq install ${__packages}"
 }
 
 append_line_to_file_as_root() {
-    local __line=$1
-    local __file=$2
+	local __line=$1
+	local __file=$2
 
-    run_as_root "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
+	run_as_root "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
 }
 
 append_line_to_file_as_user() {
-    local __line=$1
-    local __file=$2
+	local __line=$1
+	local __file=$2
 
-    run_as_user "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
+	run_as_user "grep -qxF '${__line}' ${__file} || echo '${__line}' >> ${__file}"
 }
 
 download() {
-    local __url=$1
-    local __output=$2
+	local __url=$1
+	local __output=$2
 
-    run_as_user "wget ${__url} -O ${__output}"
+	run_as_user "wget ${__url} -O ${__output}"
 }
 
 #####
@@ -101,26 +101,26 @@ download() {
 #####
 
 main() {
-    append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"
-
 	# Make sure that the system is up to date
 	pkg_update
 	pkg_upgrade
 
-	# Make sure that required tools are installed: RVM requires gnupg2
-	# and curl; git is just good to have
+	# Make sure that required tools are installed: RVM requires
+	# gnupg2 and curl; git is just good to have
 	pkg_install "gnupg2 curl git"
-
 
 	####
 	## Setup Configuration files
 	####
 
-	# When RVM installs ruby, it's going to run a script that involves running sudo. This script
-	# will only work if run from an interactive shell and not from within this bash script--this
-	# work around makes sudo not ask for a password, so that we can run the RVM from within this
-	# script.
-#	append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"
+	# When RVM installs ruby, it's going to run a script that
+	# involves running sudo. This script will only work if run
+	# from an interactive shell and not from within this bash
+	# script--this work around makes sudo not ask for a password,
+	# so that we can run the RVM from within this script.
+	# append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD:
+	# ALL" "/etc/sudoers"
+	append_line_to_file_as_root "${user} ALL=(ALL) NOPASSWD: ALL" "/etc/sudoers"
 
 	# Download the flatiron bash_profile
 	run_as_user "if [ -f ~/.profile ]; then mv ~/.profile{,.bak}; fi"
@@ -187,8 +187,14 @@ Please run \"learn whoami\" to finish setting up the learn gem.
 	run_as_root "su -l ${user}"
 }
 
+# If this script is being run as a normal user, then launch it again
+# as root, passing the username in as an argument. Not everything in
+# here needs to be run as a super use--if fact a lot of the commands
+# need to be run by the user account we are configuring--but if we
+# don't run su -l ${user} as root, then a password is needed every
+# time.
 if [ "${UID}" -eq 0 ]; then
-    main
+	main
 else
-    exec sudo "$0" "${user}"
+	exec sudo "$0" "${user}"
 fi
