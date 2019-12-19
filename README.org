@@ -177,7 +177,7 @@ everything. Just hit /Enter/:
 
 [[file:images/25-OpenTerminalEmulator.png]]
 
-4. In the terminal run =wget https://raw.githubusercontent.com/learn-co-students/online-web-pt-081219/master/00-linux-virtual-machine/xubuntu/setup.sh=
+4. In the terminal run =wget https://raw.githubusercontent.com/j-shilling/xubuntu-flatiron/master/setup.sh=
 
 [[file:images/26-WGetSetupScript.png]]
 

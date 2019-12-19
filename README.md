@@ -1,21 +1,21 @@
-- [Download the XUbuntu install .iso file](#org895b022)
-- [Create a new Virtual Machine](#org41e1e5d)
-- [Boot the VM](#orgfa3282d)
-- [Install XUbuntu](#org1a4c580)
-- [(Optional) Installing Virtual Box Guest Additions](#org0cd1553)
-- [Finalizing your installation](#org6dfcbb1)
-- [Setting up the learn-co gem](#orga9011d7)
-- [Final Steps](#org44d5361)
+- [Download the XUbuntu install .iso file](#org8ac7333)
+- [Create a new Virtual Machine](#org3660f4d)
+- [Boot the VM](#org18deb9f)
+- [Install XUbuntu](#org184f2bd)
+- [(Optional) Installing Virtual Box Guest Additions](#orgf86ba00)
+- [Finalizing your installation](#org0d27a7a)
+- [Setting up the learn-co gem](#org9ac4239)
+- [Final Steps](#orge90835a)
 
 
-<a id="org895b022"></a>
+<a id="org8ac7333"></a>
 
 # Download the XUbuntu install .iso file
 
 Download XUbuntu for [64-bit](http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04-desktop-amd64.iso) (probably what you want) or [32-bit](http://mirror.us.leaseweb.net/ubuntu-cdimage/xubuntu/releases/18.04/release/xubuntu-18.04-desktop-i386.iso) machines.
 
 
-<a id="org41e1e5d"></a>
+<a id="org3660f4d"></a>
 
 # Create a new Virtual Machine
 
@@ -52,7 +52,7 @@ You should now see your new VM listed on the left:
 ![img](images/09-Settings.png)
 
 
-<a id="orgfa3282d"></a>
+<a id="org18deb9f"></a>
 
 # Boot the VM
 
@@ -64,16 +64,16 @@ You should now see your new VM listed on the left:
 
 ![img](images/10-ClickCDIcon.png)
 
-1.  Navigate to where your [.iso file](#org895b022) was downloaded, select it, and click *Open*
+1.  Navigate to where your [.iso file](#org8ac7333) was downloaded, select it, and click *Open*
 
 ![img](images/11-SelectISOFile.png)
 
-Next to that CD icon, you should now the name of the [.iso file](#org895b022) you downloaded, instead of *Empty*. Go ahead and click *OK*.
+Next to that CD icon, you should now the name of the [.iso file](#org8ac7333) you downloaded, instead of *Empty*. Go ahead and click *OK*.
 
 ![img](images/12-ISOInserted.png)
 
 
-<a id="org1a4c580"></a>
+<a id="org184f2bd"></a>
 
 # Install XUbuntu
 
@@ -126,7 +126,7 @@ The VM will now reboot:
 ![img](images/24-XUbuntuBooted.png)
 
 
-<a id="org0cd1553"></a>
+<a id="orgf86ba00"></a>
 
 # (Optional) Installing Virtual Box Guest Additions
 
@@ -167,7 +167,7 @@ It will pause to ask you to confirm that you want to install everything. Just hi
 ![img](images/Restart.png)
 
 
-<a id="org6dfcbb1"></a>
+<a id="org0d27a7a"></a>
 
 # Finalizing your installation
 
@@ -175,7 +175,7 @@ It will pause to ask you to confirm that you want to install everything. Just hi
 
 ![img](images/25-OpenTerminalEmulator.png)
 
-1.  In the terminal run `wget https://raw.githubusercontent.com/learn-co-students/online-web-pt-081219/master/00-linux-virtual-machine/xubuntu/setup.sh`
+1.  In the terminal run `wget https://raw.githubusercontent.com/j-shilling/xubuntu-flatiron/master/setup.sh`
 
 ![img](images/26-WGetSetupScript.png)
 
@@ -192,7 +192,7 @@ When the script finishes, it should say "AUTO SETUP COMPLETE!!!":
 ![img](images/29-SetupScriptFinished.png)
 
 
-<a id="orga9011d7"></a>
+<a id="org9ac4239"></a>
 
 # Setting up the learn-co gem
 
@@ -217,7 +217,7 @@ When you press *Enter* you should see your account information:
 ![img](images/34-TokenEntered.png)
 
 
-<a id="org44d5361"></a>
+<a id="orge90835a"></a>
 
 # Final Steps
 
