@@ -130,13 +130,13 @@ main() {
 	download "${BASH_PROFILE_URL}" "${HOME}/.profile"
 
 	# Tell the XFCE4 terminal emulated to use a login shell
-	append_line_to_file_as_user "[Configuration]" "${HOME}/.config/xfce4/terminal/terminalrc"
-	append_line_to_file_as_user "CommandLoginShell=TRUE" "${HOME}/.config/xfce4/terminal/terminalrc"
+	append_line_to_file_as_user "[Configuration]" "~/.config/xfce4/terminal/terminalrc"
+	append_line_to_file_as_user "CommandLoginShell=TRUE" "~/.config/xfce4/terminal/terminalrc"
 
 	# Download some more flatiron dotfiles
-	download "${IRBRC_URL}" "${HOME}/.irbrc"
-	download "${GITIGNORE_URL}" "${HOME}/.gitignore"
-	download "${GITCONFIG_URL}" "${HOME}/.gitconfig"
+	download "${IRBRC_URL}" "~/.irbrc"
+	download "${GITIGNORE_URL}" "~/.gitignore"
+	download "${GITCONFIG_URL}" "~/.gitconfig"
 
 	####
 	## Install User Dev Tools
@@ -150,7 +150,7 @@ main() {
 	run_if_not_installed "ruby" "rvm install ruby"
 
 	# By default don't parse rdoc
-	append_line_to_file_as_user "gem: --no-document" "${HOME}/.gemrc"
+	append_line_to_file_as_user "gem: --no-document" "~/.gemrc"
 
 	# Install the needed gems
 	run_as_user 'yes | gem update --system'
